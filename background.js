@@ -3,8 +3,11 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
-	const host = new URL(details.url).host;
+	const url = new URL(details.url);
+	const host = url.host;
 	if (host === 'www.youtube.com' || host.endsWith('.youtube.com')) {
-		chrome.tabs.update({ url: 'https://media.ccc.de' });
+		if (details.parentFrameId === -1) {
+			chrome.tabs.update({ url: 'https://media.ccc.de' });
+		}
 	}
 });
